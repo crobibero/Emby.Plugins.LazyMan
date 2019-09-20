@@ -88,22 +88,23 @@ namespace Emby.Plugins.LazyMan.GameApi
                         Feeds = new List<Feed>(),
                         State = game.Status.DetailedState
                     };
-                    
+                    if (game.Content.Media != null)
+                    {
                     foreach (var epg in game.Content.Media.Epg)
                     {
-                        foreach (var item in epg.Items)
-                        {
-                            tmp.Feeds.Add(
-                                new Feed
-                                {
-                                    Id = item.MediaPlaybackId ?? item.Id,
-                                    FeedType = epg.Title + " - " + item.MediaFeedType,
-                                    CallLetters = item.CallLetters
-                                }
-                            );
+                            foreach (var item in epg.Items)
+                            {
+                                tmp.Feeds.Add(
+                                    new Feed
+                                    {
+                                        Id = item.MediaPlaybackId ?? item.Id,
+                                        FeedType = epg.Title + " - " + item.MediaFeedType,
+                                        CallLetters = item.CallLetters
+                                    }
+                                );
+                            }
                         }
                     }
-                    
                     games.Add(tmp);
                 }
             }
