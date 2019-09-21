@@ -26,7 +26,7 @@ namespace Emby.Plugins.LazyMan.GameApi
         private readonly ILogger _logger;
         private readonly IJsonSerializer _jsonSerializer;
         private readonly string _gameType;
-        
+
         public StatsApi(IHttpClient httpClient, ILogger logger, IJsonSerializer jsonSerializer, string gameType)
         {
             _httpClient = httpClient;
@@ -60,7 +60,7 @@ namespace Emby.Plugins.LazyMan.GameApi
             var containerObject = await _jsonSerializer.DeserializeFromStreamAsync(responseStream,
                 typeof(StatsApiContainer)).ConfigureAwait(false);
             var container = (StatsApiContainer) containerObject;
-            return ContainerToGame(container); 
+            return ContainerToGame(container);
         }
 
         private List<Game> ContainerToGame(StatsApiContainer container)
@@ -77,21 +77,22 @@ namespace Emby.Plugins.LazyMan.GameApi
                         GameDateTime = game.GameDate,
                         HomeTeam = new Team
                         {
-                            Name = game.Teams.Home.Team.Name, 
+                            Name = game.Teams.Home.Team.Name,
                             Abbreviation = game.Teams.Home.Team.Abbreviation
                         },
                         AwayTeam = new Team
                         {
-                            Name = game.Teams.Away.Team.Name, 
+                            Name = game.Teams.Away.Team.Name,
                             Abbreviation = game.Teams.Away.Team.Abbreviation
                         },
                         Feeds = new List<Feed>(),
                         State = game.Status.DetailedState
                     };
+                    
                     if (game.Content.Media != null)
                     {
-                    foreach (var epg in game.Content.Media.Epg)
-                    {
+                        foreach (var epg in game.Content.Media.Epg)
+                        {
                             foreach (var item in epg.Items)
                             {
                                 tmp.Feeds.Add(
@@ -105,6 +106,18 @@ namespace Emby.Plugins.LazyMan.GameApi
                             }
                         }
                     }
+                    else
+                    {
+                        tmp.Feeds.Add(
+                            new Feed
+                            {
+                                Id = "nofeed",
+                                FeedType = "No Feed Available",
+                                CallLetters = string.Empty
+                            });
+                    }
+
+
                     games.Add(tmp);
                 }
             }
