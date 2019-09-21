@@ -160,8 +160,7 @@ namespace Emby.Plugins.LazyMan
                 }
                 else
                 {
-                    // empty list, error tile
-                    return null;
+                    throw new ArgumentOutOfRangeException(nameof(sport), $"Unknown sport: {sport}");
                 }
 
                 var gameDate = DateTime.ParseExact(date, "yyyyMMdd", DateTimeFormatInfo.CurrentInfo);
