@@ -89,7 +89,7 @@ namespace Emby.Plugins.LazyMan.GameApi
                         State = game.Status.DetailedState
                     };
                     
-                    if (game.Content.Media != null)
+                    if (game.Content.Media?.Epg != null)
                     {
                         foreach (var epg in game.Content.Media.Epg)
                         {
