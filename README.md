@@ -2,6 +2,11 @@
 
 LazyMan Channel for Emby
 
+Emby caches the game streams, so you (the Emby admin) must run the "Refresh Internet Channels Task" 
+
+`Admin interface -> Scheduled Tasks -> Internet Channels -> Refresh Internet Channels`
+
+
 Get started with LazyMan at https://reddit.com/r/LazyMan
 
 Hostsfile directions: https://www.reddit.com/r/LazyMan/wiki/hostsfile
