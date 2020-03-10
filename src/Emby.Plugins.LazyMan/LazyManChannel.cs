@@ -69,7 +69,7 @@ namespace Emby.Plugins.LazyMan
         
         public Task<DynamicImageResponse> GetChannelImage(ImageType type, CancellationToken cancellationToken)
         {
-            _logger.Debug("[LazyMan] GetChannelImage {0}",
+            _logger.Debug("GetChannelImage {0}",
                 GetType().Namespace + ".Images.LM.png");
             var path = GetType().Namespace + ".Images.LM.png";
             return Task.FromResult(new DynamicImageResponse
@@ -87,7 +87,7 @@ namespace Emby.Plugins.LazyMan
                
         public Task<ChannelItemResult> GetChannelItems(InternalChannelItemQuery query, CancellationToken cancellationToken)
         {
-            _logger.Debug($"[LazyMan][GetChannelItems] Searching ID: {query.FolderId}");
+            _logger.Debug($"[GetChannelItems] Searching ID: {query.FolderId}");
 
             
             /*
@@ -110,7 +110,7 @@ namespace Emby.Plugins.LazyMan
                 return GetSportFolders();
             }
             
-            _logger.Debug("[LazyMan][GetChannelItems] Current Search Key: {0}", query.FolderId);
+            _logger.Debug("[GetChannelItems] Current Search Key: {0}", query.FolderId);
             
             // Split parts to see how deep we are
             var querySplit = query.FolderId.Split(new[] {'_'}, StringSplitOptions.RemoveEmptyEntries);
@@ -140,13 +140,13 @@ namespace Emby.Plugins.LazyMan
 
         private async Task<List<Game>> GetGameListAsync(string sport, string date)
         {
-            _logger.Debug($"[LazyMan][GetGameList] Getting games for {sport} on {date}");
+            _logger.Debug($"[GetGameList] Getting games for {sport} on {date}");
             
             List<Game> gameList;
             var cacheKey = $"{sport}_{date}";
             if (!_gameCache.TryGetValue(cacheKey, out var cacheItem))
             {
-                _logger.Debug($"[LazyMan][GetGameList] Cache miss for {sport} on {date}");
+                _logger.Debug($"[GetGameList] Cache miss for {sport} on {date}");
                 
                 // not in cache, populate cache and return
                 StatsApi statsApi;                
@@ -160,7 +160,7 @@ namespace Emby.Plugins.LazyMan
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException(nameof(sport), $"Unknown sport: {sport}");
+                    return new List<Game>(0);
                 }
 
                 var gameDate = DateTime.ParseExact(date, "yyyyMMdd", DateTimeFormatInfo.CurrentInfo);
@@ -171,7 +171,7 @@ namespace Emby.Plugins.LazyMan
             }
             else
             {
-                _logger.Debug($"[LazyMan][GetGameList] Cache hit for {sport} on {date}");
+                _logger.Debug($"[GetGameList] Cache hit for {sport} on {date}");
                 gameList = cacheItem.Value;
             }
 
@@ -185,7 +185,7 @@ namespace Emby.Plugins.LazyMan
         /// <returns></returns>
         private Task<ChannelItemResult> GetSportFolders()
         {
-            _logger.Debug("[LazyMan][GetSportFolders] Get Sport Folders");
+            _logger.Debug("[GetSportFolders] Get Sport Folders");
 
             var pingTestDomains = new[]
             {
@@ -234,7 +234,7 @@ namespace Emby.Plugins.LazyMan
             var today = DateTime.Today;
             const int daysBack = 5;
 
-            _logger.Debug($"[LazyMan][GetDateFolders] Sport: {sport}, {today:yyyyMMdd}");
+            _logger.Debug($"[GetDateFolders] Sport: {sport}, {today:yyyyMMdd}");
             
             return Task.FromResult(new ChannelItemResult
             {
@@ -261,7 +261,7 @@ namespace Emby.Plugins.LazyMan
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         private async Task<ChannelItemResult> GetGameFolders(string sport, string date)
         {
-            _logger.Debug($"[LazyMan][GetGameFolders] Sport: {sport}, Date: {date}");
+            _logger.Debug($"[GetGameFolders] Sport: {sport}, Date: {date}");
             
             var gameList = await GetGameListAsync(sport, date).ConfigureAwait(false);
             if(gameList == null)
@@ -288,7 +288,7 @@ namespace Emby.Plugins.LazyMan
         /// <returns></returns>
         private async Task<ChannelItemResult> GetFeedFolders(string sport, string date, string gameId)
         {
-            _logger.Debug($"[LazyMan][GetFeedFolders] Sport: {sport}, Date: {date}, GameId: {gameId}");
+            _logger.Debug($"[GetFeedFolders] Sport: {sport}, Date: {date}, GameId: {gameId}");
             
             var gameList = await GetGameListAsync(sport, date).ConfigureAwait(false);
             if(gameList == null)
@@ -311,7 +311,7 @@ namespace Emby.Plugins.LazyMan
                 };
 
             var json = _jsonSerializer.SerializeToString(foundGame);
-            _logger.Debug($"[LazyMan][GetFeedFolders] Found Game: {json}");
+            _logger.Debug($"[GetFeedFolders] Found Game: {json}");
             
             return new ChannelItemResult
             {
@@ -337,7 +337,7 @@ namespace Emby.Plugins.LazyMan
         /// <returns></returns>
         private async Task<ChannelItemResult> GetQualityItems(string sport, string date, string gameId, string feedId)
         {
-            _logger.Debug($"[LazyMan][GetQualityItems] Sport: {sport}, Date: {date}, GameId: {gameId}, FeedId: {feedId}");
+            _logger.Debug($"[GetQualityItems] Sport: {sport}, Date: {date}, GameId: {gameId}, FeedId: {feedId}");
             
             var gameList = await GetGameListAsync(sport, date).ConfigureAwait(false);
             if(gameList == null)
