@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup> 
-        <AssemblyVersion>8.0.0.0</AssemblyVersion> 
-        <FileVersion>8.0.0.0</FileVersion> 
+        <AssemblyVersion>9.0.0.0</AssemblyVersion> 
+        <FileVersion>9.0.0.0</FileVersion> 
         <TargetFramework>netstandard2.1</TargetFramework> 
     </PropertyGroup>
 
@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MediaBrowser.Server.Core" Version="4.4.0.15-beta" />
+      <PackageReference Include="MediaBrowser.Server.Core" Version="4.4-*" />
       <PackageReference Include="System.Memory" Version="4.5.3" />
     </ItemGroup>
 
